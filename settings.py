@@ -2,4 +2,5 @@
 settings the python way
 '''
 LIB_DIR = '/home/vagrant/citrusleaf_client_swig_2.1.11/swig/python'
-#TODO set log level in here
+PORT = None #using default 3000
+HOST = None #using current host as default
