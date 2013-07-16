@@ -31,14 +31,7 @@ class AerospikeAnalyticsCollector(object):
   https://docs.aerospike.com/display/AS2/Using+clinfo+to+Read+Parameters
   '''
   def __init__(self, *args, **kwargs):
-    try:
-      config_path = settings.LIB_DIR or kwargs.get('config', None)
-    except ImportError, ie:
-      msg = 'Could not import Aerospike API client. Not found in path: %s'%config_path
-      logging.critical(msg)
-      raise ImportError
-    else:
-      logging.debug('Aerospike client successfully imported')
+    config_path = settings.LIB_DIR or kwargs.get('config', None)
     
     #assuming aerospike will always run locally.
     port = self.port = settings.PORT or 3000
