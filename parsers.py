@@ -10,7 +10,7 @@ def _parse(delimiter=';'):
   '''
   internal routine to parse information and return as it is generated
   '''
-  stats - raw.split(delimiter)
+  stats = raw.split(delimiter)
   for metric in stats:
     key, value = metric.split('=')
     yield (key, value)
