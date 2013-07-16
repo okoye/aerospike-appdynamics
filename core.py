@@ -8,6 +8,7 @@ import sys
 import logging
 import settings
 import parsers
+import exceptions
 from socket import gethostname
 try:
   import citrusleaf
@@ -52,7 +53,6 @@ class AerospikeAnalyticsCollector(object):
     returns the total number of requests 
     '''
     key = 'statistics'
-    #TODO
     #simply return the specified statistic
     #query underlying citrusleaf interface, parse results,
     #process parsed results and return relevant stat.
@@ -60,7 +60,7 @@ class AerospikeAnalyticsCollector(object):
 
     #post processing steps:
     if not result:
-      logging.debug('%s to %s:%s returned no data'%(name, self.host, self.port))
-      return None
-    parsers.statistics(result)
+      raise exceptions.AerospikeNoDataError(self.host, self.port, name)
+    if result == -1:
+      raise exceptions.AerospikeError(self.host, self.port, name)
 
