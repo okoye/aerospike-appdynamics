@@ -7,6 +7,7 @@ an aerospike analytics collector object.
 import sys
 import logging
 import settings
+import parsers
 from socket import gethostname
 try:
   import citrusleaf
@@ -22,20 +23,11 @@ class AerospikeAnalyticsCollector(object):
   of the data reported by Aerospike by providing a way to retrieve 'delta' changes since
   last poll.
 
-  Some relevant terms you should be familiar with to use this class are:
-
-  1.  policy: how should this analytics collector act. possible values are:
-        dumbpipe:   relay results from the Aerospike API straight to caller
-        aggregate:  tally total aggregate of result and send to caller. e.g latency is
-                    reported in 1ms, 8ms, 10ms intervals, so aggregate sums all values
-                    and reports as single statistic.
-        specific:   return a specific value from the statistic requested. e.g continuing 
-                    with the latency example, you could set policy as specific and will be
-                    required to provide a value to specific_key for the value you want.
-  2.  specific_key: represents the specific key from a statistic we are interested in.
-                    should be accompanied with the specific policy setting.
-  3.  delta:        A boolean value specifying whether only differences (delta changes) since
+  1.  delta:        A boolean value specifying whether only differences (delta changes) since
                     last poll should be returned to the client.
+  
+  This class implements the 'values' specified on the clinfo page
+  https://docs.aerospike.com/display/AS2/Using+clinfo+to+Read+Parameters
   '''
   def __init__(self, *args, **kwargs):
     try:
@@ -51,14 +43,21 @@ class AerospikeAnalyticsCollector(object):
     port = self.port = settings.PORT or 3000
     host = self.host = settings.HOST or gethostname()
 
-    self.info = citrusleaf.citrusleaf_info 
+    self.info = citrusleaf.citrusleaf_info #interface to aerospike monitor
+
     logging.debug('Finished instantiation of Aerospike information proxy')
     
-  def nodestatistic(self, name, policy=''):
+  def statistics(self, name, delta=True):
     '''
     returns the total number of requests 
     '''
-    key = 'statistics/'
+    key = 'statistics'
+    #TODO
+    #simply return the specified statistic
+    #query underlying citrusleaf interface, parse results,
+    #process parsed results and return relevant stat.
+    result = self.info('localhost', self.port, key)
 
-  def throughput(self):
-    pass
+    #post processing steps:
+    parsers.statistics(result)
+
