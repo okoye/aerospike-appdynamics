@@ -1,7 +1,7 @@
 '''
 abstracts how the data from aerospike is parsed in case of future changes.
 
-all functions either return a dictionary or a generator of tuples (key, value)
+all functions a generator or iterable object of tuples (key, value)
 for use by calling function.
 
 aerospike in turn either returns a big string or dictionary.
@@ -18,10 +18,10 @@ def _parse(delimiter=';'):
 def statistics(raw):
   #since statistics module returns a big a$$ string, return results
   #immediately (via a generator) as data gets parsed
-  for k, v in _parse(raw):
+  for k, v in _parse(delimiter=raw):
     yield k, v
 
 def namespace(raw):
   #returns results immediately (via a generator) as data gets parsed
-  for k, v in _parse(raw):
+  for k, v in _parse(delimiter=raw):
     yield k, v

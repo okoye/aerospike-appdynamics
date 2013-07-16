@@ -18,10 +18,10 @@ class AerospikeBaseException(Exception):
                                               self.port,
                                               self.info)
 
-class AerospikeNoDataError(AerospikeBaseException):
+class AerospikeNoData(AerospikeBaseException):
   
   def __init__(self, host, port, stat, **kwargs):
-    super(NoDataError, self).__init__(host, port, stat)
+    super(AerospikeNoData, self).__init__(host, port, stat)
     self.context = 'no data'
 
 class AerospikeError(self, host, port, stat, **kwargs):
@@ -30,3 +30,8 @@ class AerospikeError(self, host, port, stat, **kwargs):
     super(AerospikeError, self).__init__(host, port, stat)
     self.context = 'error code -1'
 
+class AerospikeNoSuchStat(AerospikeBaseException):
+  
+  def __init__(self, host, port, stat, **kwargs):
+    super(AerospikeNoSuchStat, self).__init__(host, port, stat)
+    self.context = 'no such statistic'

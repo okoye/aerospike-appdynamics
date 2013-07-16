@@ -50,14 +50,16 @@ class AerospikeAnalyticsCollector(object):
     
   def statistics(self, name, delta=True):
     '''
-    name: the statistic we are interested in. refer to:
-          https://docs.aerospike.com/display/AS2/Statistics+Reference
-          for a list of statistics
+    @param
+      name: the statistic we are interested in. refer to:
+            https://docs.aerospike.com/display/AS2/Statistics+Reference
+            for a list of statistics
+    @returns: a dict, with name as key, and statistic as value
     '''
     key = 'statistics'
-    #simply return the specified statistic
+    
     #query underlying citrusleaf interface, parse results,
-    #process parsed results and return relevant stat.
+    #process parsed results and return relevant stats.
     result = self.info('localhost', self.port, key)
 
     #post processing steps:
@@ -65,8 +67,20 @@ class AerospikeAnalyticsCollector(object):
       raise exceptions.AerospikeNoDataError(self.host, self.port, name)
     if result == -1:
       raise exceptions.AerospikeError(self.host, self.port, name)
+    
+    stats = {}
+    for k, v in parser.statistics(result):
+      if k == name:
+        #TODO: add support for delta changes
+        logging.debug('found data for statistic %s'%name)
+        stats[name] = v
+        continue #TODO: add support for multiple stats in one call
+    return stats 
 
   def namespace(self, name, delta=True):
     '''
-    name: the name of the namespace caller is interested in
+    @param
+      name: the name of the namespace caller is interested in
+    @returns: a dict, with namespace name as key, and statistic as value
     '''
+    pass
