@@ -50,7 +50,9 @@ class AerospikeAnalyticsCollector(object):
     
   def statistics(self, name, delta=True):
     '''
-    returns the total number of requests 
+    name: the statistic we are interested in. refer to:
+          https://docs.aerospike.com/display/AS2/Statistics+Reference
+          for a list of statistics
     '''
     key = 'statistics'
     #simply return the specified statistic
@@ -64,3 +66,7 @@ class AerospikeAnalyticsCollector(object):
     if result == -1:
       raise exceptions.AerospikeError(self.host, self.port, name)
 
+  def namespace(self, name, delta=True):
+    '''
+    name: the name of the namespace caller is interested in
+    '''
