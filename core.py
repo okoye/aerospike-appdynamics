@@ -69,7 +69,7 @@ class AerospikeAnalyticsCollector(object):
       raise exceptions.AerospikeError(self.host, self.port, name)
     
     stats = {}
-    for k, v in parser.statistics(result):
+    for k, v in parsers.statistics(result):
       if k == name:
         #TODO: add support for delta changes
         logging.debug('found data for statistic %s'%name)
