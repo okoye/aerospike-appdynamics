@@ -59,5 +59,8 @@ class AerospikeAnalyticsCollector(object):
     result = self.info('localhost', self.port, key)
 
     #post processing steps:
+    if not result:
+      logging.debug('%s to %s:%s returned no data'%(name, self.host, self.port))
+      return None
     parsers.statistics(result)
 
