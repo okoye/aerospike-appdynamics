@@ -8,8 +8,8 @@ import logging
 
 
 def test__instantiation():
-  collector = AerospikeAnalyticsCollector('nothing')
-  collector.statistics('foo')
+  collector = AerospikeAnalyticsCollector()
+  collector.statistics('uptime')
 
 def main():
   test__instantiation()
