@@ -6,7 +6,7 @@ for use by calling function.
 
 aerospike in turn either returns a big string or dictionary.
 '''
-def _parse(delimiter=';'):
+def _parse(raw, delimiter=';'):
   '''
   internal routine to parse information and return as it is generated
   '''
@@ -18,10 +18,10 @@ def _parse(delimiter=';'):
 def statistics(raw):
   #since statistics module returns a big a$$ string, return results
   #immediately (via a generator) as data gets parsed
-  for k, v in _parse(delimiter=raw):
+  for k, v in _parse(raw):
     yield k, v
 
 def namespace(raw):
   #returns results immediately (via a generator) as data gets parsed
-  for k, v in _parse(delimiter=raw):
+  for k, v in _parse(raw):
     yield k, v
