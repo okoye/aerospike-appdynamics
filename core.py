@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''
 shared functions, primarily responsible for returning
 an aerospike analytics collector object.
@@ -9,6 +10,8 @@ import logging
 import settings
 import parsers
 import exceptions
+import leveldb
+from traceback import format_exc
 from socket import gethostname
 try:
   import citrusleaf
@@ -23,7 +26,7 @@ class AerospikeAnalyticsCollector(object):
   custom monitors for AppDynamics must implement. It also hides some of the idiosyncracies
   of the data reported by Aerospike by providing a way to retrieve 'delta' changes since
   last poll.
-
+  Relevant terminology:
   1.  delta:        A boolean value specifying whether only differences (delta changes) since
                     last poll should be returned to the client.
   
@@ -38,7 +41,7 @@ class AerospikeAnalyticsCollector(object):
     host = self.host = settings.HOST or gethostname()
 
     self.info = citrusleaf.citrusleaf_info #interface to aerospike monitor
-
+    self.db = leveldb.DB(settings.DB_FILE, create_if_missing=True)
     logging.debug('Finished instantiation of Aerospike information proxy')
     
   def statistics(self, name, delta=True):
@@ -50,7 +53,8 @@ class AerospikeAnalyticsCollector(object):
     @returns: a dict, with name as key, and statistic as value
     '''
     key = 'statistics'
-    
+    db_key = '%s:%s'%(key,name) 
+
     #query underlying citrusleaf interface, parse results,
     #process parsed results and return relevant stats.
     result = self.info('localhost', self.port, key)
@@ -64,9 +68,11 @@ class AerospikeAnalyticsCollector(object):
     stats = {}
     for k, v in parsers.statistics(result):
       if k == name:
-        #TODO: add support for delta changes
         logging.debug('found data for statistic %s'%name)
-        stats[name] = v
+        if delta:
+          stats[name] = self._delta(db_key, v)
+        else:
+          stats[name] = v
         continue #TODO: add support for multiple stats in one call
     return stats 
 
@@ -77,3 +83,23 @@ class AerospikeAnalyticsCollector(object):
     @returns: a dict, with namespace name as key, and statistic as value
     '''
     pass
+
+  def _delta(self, db_key, value):
+    '''
+    do a simple delta change
+    '''
+    previous = self.db.get(db_key)
+    isnum = lambda x: type(x) is float or type(x) is int
+    try: 
+      assert isnum(value)
+    except Exception, ex:
+      raise exceptions.LibraryInternalError('value passed in must be a number',
+                                            format_exc())
+    else:
+      self.db.put(db_key, value)
+
+    if previous:
+      #hmm, is absolute difference more appropriate?
+      return float(value) - float(previous)
+    else:
+      return value 

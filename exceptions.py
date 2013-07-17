@@ -35,3 +35,14 @@ class AerospikeNoSuchStat(AerospikeBaseException):
   def __init__(self, host, port, stat, **kwargs):
     super(AerospikeNoSuchStat, self).__init__(host, port, stat)
     self.context = 'no such statistic'
+
+class LibraryInternalError(Exception):
+  
+  def __init__(self, msg, traceback,**kwargs):
+    super(LibraryInternalError, self).__init__()
+    if not msg:
+      self.msg = 'An internal problem was encountered'
+    else:
+      self.msg = msg
+    self.tb = traceback
+
