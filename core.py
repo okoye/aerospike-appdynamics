@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python26
 '''
 shared functions, primarily responsible for returning
 an aerospike analytics collector object.
