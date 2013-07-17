@@ -15,13 +15,19 @@ def _parse(raw, delimiter=';'):
     key, value = metric.split('=')
     yield (key, value)
 
+def _float_or_int(value):
+  if float(value) > int(x):
+    return float(value)
+  else:
+    return int(x)
+
 def statistics(raw):
   #since statistics module returns a big a$$ string, return results
   #immediately (via a generator) as data gets parsed
   for k, v in _parse(raw):
-    yield k, v
+    yield k, _float_or_int(v)
 
 def namespace(raw):
   #returns results immediately (via a generator) as data gets parsed
   for k, v in _parse(raw):
-    yield k, v
+    yield k, _float_or_int(v)

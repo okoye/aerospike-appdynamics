@@ -66,9 +66,15 @@ class AerospikeAnalyticsCollector(object):
       raise exceptions.AerospikeError(self.host, self.port, name)
     
     stats = {}
+    isnum = lambda x: type(x) is float or type(x) is int
     for k, v in parsers.statistics(result):
       if k == name:
         logging.debug('found data for statistic %s'%name)
+        try: #verify v is numeric in nature
+          assert isnum(v)
+        except Exception, ex:
+          raise exceptions.LibraryInternalError('value passed in must be a number',
+                                                format_exc())
         if delta:
           stats[name] = self._delta(db_key, v)
         else:
@@ -82,21 +88,14 @@ class AerospikeAnalyticsCollector(object):
       name: the name of the namespace caller is interested in
     @returns: a dict, with namespace name as key, and statistic as value
     '''
-    pass
+    raise NotImplementedError
 
   def _delta(self, db_key, value):
     '''
-    do a simple delta change
+    do a simple delta change calculation.
     '''
     previous = self.db.get(db_key)
-    isnum = lambda x: type(x) is float or type(x) is int
-    try: 
-      assert isnum(value)
-    except Exception, ex:
-      raise exceptions.LibraryInternalError('value passed in must be a number',
-                                            format_exc())
-    else:
-      self.db.put(db_key, value)
+    self.db.put(db_key, value)
 
     if previous:
       #hmm, is absolute difference more appropriate?
