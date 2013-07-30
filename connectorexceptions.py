@@ -24,7 +24,7 @@ class AerospikeNoData(AerospikeBaseException):
     super(AerospikeNoData, self).__init__(host, port, stat)
     self.context = 'no data'
 
-class AerospikeError(self, host, port, stat, **kwargs):
+class AerospikeError(AerospikeBaseException):
   
   def __init__(self, host, port, stat, **kwargs):
     super(AerospikeError, self).__init__(host, port, stat)
