@@ -9,7 +9,7 @@ import sys
 import logging
 import settings
 import parsers
-import exceptions
+import connectorexceptions as ce
 import leveldb
 from traceback import format_exc
 from socket import gethostname
@@ -61,9 +61,9 @@ class AerospikeAnalyticsCollector(object):
 
     #post processing steps:
     if not result:
-      raise exceptions.AerospikeNoDataError(self.host, self.port, name)
+      raise ce.AerospikeNoDataError(self.host, self.port, name)
     if result == -1:
-      raise exceptions.AerospikeError(self.host, self.port, name)
+      raise ce.AerospikeError(self.host, self.port, name)
     
     stats = {}
     isnum = lambda x: type(x) is float or type(x) is int
@@ -73,7 +73,7 @@ class AerospikeAnalyticsCollector(object):
         try: #verify v is numeric in nature
           assert isnum(v)
         except Exception, ex:
-          raise exceptions.LibraryInternalError('value passed in must be a number',
+          raise ce.LibraryInternalError('value passed in must be a number',
                                                 format_exc())
         if delta:
           stats[name] = self._delta(db_key, v)
