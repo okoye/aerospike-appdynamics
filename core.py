@@ -100,3 +100,9 @@ class AerospikeAnalyticsConnector(object):
       return float(value) - float(previous)
     else:
       return value 
+
+  def close(self):
+    '''
+    cleaned up all open resources
+    '''
+    self.db.close()
