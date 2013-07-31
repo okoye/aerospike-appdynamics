@@ -34,8 +34,6 @@ class AerospikeAnalyticsCollector(object):
   https://docs.aerospike.com/display/AS2/Using+clinfo+to+Read+Parameters
   '''
   def __init__(self, *args, **kwargs):
-    config_path = settings.LIB_DIR or kwargs.get('config', None)
-    
     #assuming aerospike will always run locally.
     port = self.port = settings.PORT or 3000
     host = self.host = settings.HOST or gethostname()
