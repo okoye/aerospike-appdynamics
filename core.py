@@ -20,7 +20,7 @@ except ImportError, ie:
   logging.critical(msg)
   raise
 
-class AerospikeAnalyticsCollector(object):
+class AerospikeAnalyticsConnector(object):
   '''
   AerospikeAnalyticsCollector abstracts some of the common requirements any set of
   custom monitors for AppDynamics must implement. It also hides some of the idiosyncracies
