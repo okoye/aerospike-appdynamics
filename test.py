@@ -2,7 +2,7 @@
 Ideally a test library for Aerospike Analytics Collector.
 Also shows how to call/use the core library module.
 '''
-from core import AerospikeAnalyticsConnector
+from lib.core import AerospikeAnalyticsConnector
 import logging
 import unittest
 
