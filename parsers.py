@@ -16,10 +16,10 @@ def _parse(raw, delimiter=';'):
     yield (key, value)
 
 def _float_or_int(value):
-  if float(value) > int(x):
+  if float(value) > int(value):
     return float(value)
   else:
-    return int(x)
+    return int(value)
 
 def statistics(raw):
   #since statistics module returns a big a$$ string, return results
