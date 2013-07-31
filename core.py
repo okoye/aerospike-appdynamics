@@ -76,6 +76,11 @@ class AerospikeAnalyticsCollector(object):
           raise ce.LibraryInternalError('value passed in must be a number',
                                                 format_exc())
         if delta:
+          try:
+            assert isnum(v)
+          except ValueError, ve:
+            raise ValueError('delta differences can only be computed for
+            numeric values')
           stats[name] = self._delta(db_key, v)
         else:
           stats[name] = v
