@@ -10,6 +10,7 @@ import logging
 def test__instantiation():
   collector = AerospikeAnalyticsCollector()
   collector.statistics('uptime')
+  collector.statistics('stat_read_errs_other')
 
 def main():
   test__instantiation()
