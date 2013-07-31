@@ -95,7 +95,7 @@ class AerospikeAnalyticsCollector(object):
     do a simple delta change calculation.
     '''
     previous = self.db.get(db_key)
-    self.db.put(db_key, value)
+    self.db.put(db_key, '%s'%value)
 
     if previous:
       #hmm, is absolute difference more appropriate?
