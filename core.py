@@ -70,18 +70,13 @@ class AerospikeAnalyticsCollector(object):
     for k, v in parsers.statistics(result):
       if k == name:
         logging.debug('found data for statistic %s'%name)
-        try: #verify v is numeric in nature
-          assert isnum(v)
-        except Exception, ex:
-          raise ce.LibraryInternalError('value passed in must be a number',
-                                                format_exc())
         if delta:
           try:
             assert isnum(v)
           except ValueError, ve:
-            raise ValueError('delta differences can only be computed for
-            numeric values')
-          stats[name] = self._delta(db_key, v)
+            raise ValueError('delta differences can only be computed for numeric values')
+          else:
+            stats[name] = self._delta(db_key, v)
         else:
           stats[name] = v
         continue #TODO: add support for multiple stats in one call
