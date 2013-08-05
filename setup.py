@@ -10,4 +10,6 @@ setup(name='aerospike-appdynamics-connector',
       author_email='dokoye@wsgc.com',
       package_dir={'':'lib'},
       packages=find_packages(where='lib'),
-      test_suite='tests')
+      test_suite='tests',
+      maintainer='Chuck Scott',
+      maintainer_email='cscott2@wsgc.com')
