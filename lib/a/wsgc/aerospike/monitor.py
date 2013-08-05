@@ -7,12 +7,12 @@ an aerospike analytics collector object.
 '''
 import sys
 import logging
-import settings
-import parsers
-import connectorexceptions as ce
 import leveldb
 from traceback import format_exc
 from socket import gethostname
+from a.wsgc.aerospike import exceptions as ce
+from a.wsgc.aerospike import settings
+from a.wsgc.aerospike import parsers
 try:
   import citrusleaf
 except ImportError, ie:
