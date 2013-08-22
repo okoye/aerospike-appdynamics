@@ -617,45 +617,57 @@ class _MemoryDBImpl(object):
         self._is_snapshot = is_snapshot
 
     def close(self):
-        with self._lock:
-            self._data = []
+        self._lock.__enter__()
+        self._data = []
+        self._lock.__exit__()
 
     def put(self, key, val, **_kwargs):
         if self._is_snapshot:
             raise TypeError("cannot put on leveldb snapshot")
         assert isinstance(key, str)
         assert isinstance(val, str)
-        with self._lock:
+        try:
+            self._lock.__enter__()
             idx = bisect.bisect_left(self._data, (key, ""))
             if 0 <= idx < len(self._data) and self._data[idx][0] == key:
                 self._data[idx] = (key, val)
             else:
                 self._data.insert(idx, (key, val))
+        finally:
+            self._lock.__exit__()
 
     def delete(self, key, **_kwargs):
         if self._is_snapshot:
             raise TypeError("cannot delete on leveldb snapshot")
-        with self._lock:
+        try:
+            self._lock.__enter__()
             idx = bisect.bisect_left(self._data, (key, ""))
             if 0 <= idx < len(self._data) and self._data[idx][0] == key:
                 del self._data[idx]
+        finally:
+            self._lock.__exit__()
 
     def get(self, key, **_kwargs):
-        with self._lock:
-            idx = bisect.bisect_left(self._data, (key, ""))
-            if 0 <= idx < len(self._data) and self._data[idx][0] == key:
-                return self._data[idx][1]
-            return None
+        self._lock.__enter__()
+        idx = bisect.bisect_left(self._data, (key, ""))
+        if 0 <= idx < len(self._data) and self._data[idx][0] == key:
+            self._lock.__exit__()
+            return self._data[idx][1]
+        self._lock.__exit__()
+        return None
 
     # pylint: disable=W0212
     def write(self, batch, **_kwargs):
         if self._is_snapshot:
             raise TypeError("cannot write on leveldb snapshot")
-        with self._lock:
+        try:
+            self._lock.__enter__()
             for key, val in batch._puts.iteritems():
                 self.put(key, val)
             for key in batch._deletes:
                 self.delete(key)
+        finally:
+            self._lock.__exit__()
 
     def iterator(self, **_kwargs):
         # WARNING: huge performance hit.
@@ -664,8 +676,10 @@ class _MemoryDBImpl(object):
         # even if puts or deletes happen while the iterator is in use. to
         # simulate this, there isn't anything simple we can do for now besides
         # just copy the whole thing.
-        with self._lock:
-            return _IteratorMemImpl(self._data[:])
+        self._lock.__enter__()
+        iml = _IteratorMemImpl(self._data[:])
+        self._lock.__exit__()
+        return iml
 
     def approximateDiskSizes(self, *ranges):
         if self._is_snapshot:
@@ -678,8 +692,10 @@ class _MemoryDBImpl(object):
     def snapshot(self):
         if self._is_snapshot:
             return self
-        with self._lock:
-            return _MemoryDBImpl(data=self._data[:], is_snapshot=True)
+        self._lock.__enter__()
+        mdi = _MemoryDBImpl(data=self._data[:], is_snapshot=True)
+        self._lock.__exit__()
+        return mdi
 
 
 class _PointerRef(object):
