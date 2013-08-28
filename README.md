@@ -5,6 +5,9 @@ Custom monitors for aerospike to integrate with app dynamics.
 ==============================
 Installing:
 ==============================
+Before you install ensure a compatible sqlite3 lib is installed. For CentOS5.x
+systems that ship with python2.4, you can install python-sqlite2
+
 To install as a python package, simply run:
   python setup.py install
 
