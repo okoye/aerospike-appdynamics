@@ -1,7 +1,6 @@
 import sys
 sys.path.append('../lib')
 from a.wsgc.aerospike.store import KeyValueStore
-import sqlite3 as sqlite
 import cPickle
 import logging
 import unittest
