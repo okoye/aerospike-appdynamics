@@ -2,9 +2,9 @@ import os
 import cPickle
 from datetime import datetime
 try:
-  import sqlite3
+  import sqlite3 as sqlite
 except ImportError:
-  import pysqlite2 as sqlite3 #compatibility with python2.4
+  import pysqlite2 as sqlite #compatibility with python2.4
 
 class KeyValueStore(object):
   

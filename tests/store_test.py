@@ -6,9 +6,9 @@ import logging
 import unittest
 from datetime import datetime
 try:
-  import sqlite3
+  import sqlite3 as sqlite
 except ImportError:
-  import pysqlite2 as sqlite3
+  import pysqlite2 as sqlite
 
 class TestPersistentStore(unittest.TestCase):
 
