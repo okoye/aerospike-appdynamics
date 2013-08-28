@@ -1,7 +1,10 @@
 import os
-import sqlite3 as sqlite
 import cPickle
 from datetime import datetime
+try:
+  import sqlite3
+except ImportError:
+  import pysqlite2 as sqlite3 #compatibility with python2.4
 
 class KeyValueStore(object):
   

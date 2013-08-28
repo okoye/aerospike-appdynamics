@@ -6,6 +6,10 @@ import cPickle
 import logging
 import unittest
 from datetime import datetime
+try:
+  import sqlite3
+except ImportError:
+  import pysqlite2 as sqlite3
 
 class TestPersistentStore(unittest.TestCase):
 
