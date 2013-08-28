@@ -7,12 +7,12 @@ an aerospike analytics collector object.
 '''
 import sys
 import logging
-import leveldb
 from traceback import format_exc
 from socket import gethostname
 from a.wsgc.aerospike import exceptions as ce
 from a.wsgc.aerospike import settings
 from a.wsgc.aerospike import parsers
+from a.wsgc.aerospike import store
 try:
   import citrusleaf
 except ImportError, ie:
@@ -39,7 +39,7 @@ class AerospikeAnalyticsConnector(object):
     host = self.host = settings.HOST or gethostname()
 
     self.info = citrusleaf.citrusleaf_info #interface to aerospike monitor
-    self.db = leveldb.DB(settings.DB_FILE, create_if_missing=True)
+    self.db = KeyValueStore(settings.DB_FILE)
     logging.debug('Finished instantiation of Aerospike information proxy')
     
   def statistics(self, name, delta=True):
@@ -100,9 +100,3 @@ class AerospikeAnalyticsConnector(object):
       return float(value) - float(previous)
     else:
       return value 
-
-  def close(self):
-    '''
-    cleaned up all open resources
-    '''
-    self.db.close()
