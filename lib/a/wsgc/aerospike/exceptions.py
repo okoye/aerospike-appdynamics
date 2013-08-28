@@ -31,8 +31,11 @@ class AerospikeError(AerospikeBaseException):
     self.stat = stat
     self.context = 'error code -1'
   
+  def __str__(self):
+    err = '%s:%s => %s'%(self.host, self.port, self.context)
+
   def __repr__(self):
-    return '%s:%s => %s'(self.host, self.port, self.context)
+    return '%s:%s => %s'%(self.host, self.port, self.context)
 
 class AerospikeNoSuchStat(AerospikeBaseException):
   
