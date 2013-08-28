@@ -17,8 +17,7 @@ class KeyValueStore(object):
       byte_string = unicode(k)
     except UnicodeEncodeError:
       byte_string = unicode.decode(k).encode('unicode_escape')
-    finally:
-      return byte_string
+    return byte_string
 
   def put(self, key, value):
     '''
