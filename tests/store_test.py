@@ -26,7 +26,7 @@ class TestPersistentStore(unittest.TestCase):
 
   def _get(self, k):
     cursor = self.c.cursor()
-    cursor.execute('''SELECT * FROM spikey_metrics WHERE key=?''', unicode(k)) 
+    cursor.execute('SELECT * FROM spikey_metrics WHERE key=?', (unicode(k),)) 
     result = cursor.fetchone()
     if result is not None:
       return cPickle.loads(str(result[1]))
@@ -57,15 +57,17 @@ class TestPersistentStore(unittest.TestCase):
     self.assertEquals(result, 'waldo')
 
   def test_put(self):
+    lang_dict = {'clojure': 'rocks',
+                  'python': 'okay',
+                  'java': 'meh'}
     self.kv.put('optimus', 'prime')
     self.kv.put('waldo', 'missing')
     self.kv.put(3, '65')
-    self.kv.put('languages', {'clojure':'rocks',
-                              'python': 'meh',
-                              'java': 'no comment'})
+    self.kv.put('languages', lang_dict)
     result = self._get(3)
     self.assertEquals(result, '65')
-
+    result = self._get('waldo')
+    self.assertEquals(result, 'missing')
 
 if __name__ == '__main__':
   logging.basicConfig(level=logging.DEBUG)
