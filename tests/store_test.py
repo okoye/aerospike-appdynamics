@@ -60,7 +60,6 @@ class TestPersistentStore(unittest.TestCase):
     lang_dict = {'clojure': 'rocks',
                   'python': 'okay',
                   'java': 'meh'}
-    self.kv.put('optimus', 'prime')
     self.kv.put('waldo', 'missing')
     self.kv.put(3, '65')
     self.kv.put('languages', lang_dict)
@@ -68,6 +67,8 @@ class TestPersistentStore(unittest.TestCase):
     self.assertEquals(result, '65')
     result = self._get('waldo')
     self.assertEquals(result, 'missing')
+    result = self._get('languages')
+    self.assertEquals(result, lang_dict)
 
 if __name__ == '__main__':
   logging.basicConfig(level=logging.DEBUG)
