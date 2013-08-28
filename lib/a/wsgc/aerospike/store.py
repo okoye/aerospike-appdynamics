@@ -4,7 +4,7 @@ from datetime import datetime
 try:
   import sqlite3 as sqlite
 except ImportError:
-  import pysqlite2 as sqlite #compatibility with python2.4
+  from pysqlite2 import dbapi2 as sqlite #compatibility with python2.4
 
 class KeyValueStore(object):
   

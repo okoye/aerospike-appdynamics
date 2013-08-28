@@ -8,7 +8,7 @@ from datetime import datetime
 try:
   import sqlite3 as sqlite
 except ImportError:
-  import pysqlite2 as sqlite
+  from pysqlite2 import dbapi2 as sqlite
 
 class TestPersistentStore(unittest.TestCase):
 
