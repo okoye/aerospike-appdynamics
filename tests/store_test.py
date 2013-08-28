@@ -4,7 +4,10 @@ from a.wsgc.aerospike.store import KeyValueStore
 import cPickle
 import logging
 import unittest
-import sqlite3 as sqlite
+try:
+  import sqlite3 as sqlite
+except ImportError:
+  import sqlite
 from datetime import datetime
 
 class TestPersistentStore(unittest.TestCase):
