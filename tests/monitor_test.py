@@ -10,9 +10,6 @@ class TestAerospikeConnector(unittest.TestCase):
   def setUp(self):
     self.collector = AerospikeAnalyticsConnector()
   
-  def tearDown(self):
-    self.collector.close()
-
   def test__instantiation_and_retrieval(self):
     uptime_result = self.collector.statistics('uptime')
     err_result = self.collector.statistics('stat_read_errs_other')
