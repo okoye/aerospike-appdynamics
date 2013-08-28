@@ -1,5 +1,3 @@
-import sys
-sys.path.append('../lib')
 from a.wsgc.aerospike.store import KeyValueStore
 import cPickle
 import logging

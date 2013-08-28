@@ -39,7 +39,7 @@ class AerospikeAnalyticsConnector(object):
     host = self.host = settings.HOST or gethostname()
 
     self.info = citrusleaf.citrusleaf_info #interface to aerospike monitor
-    self.db = KeyValueStore(settings.DB_FILE)
+    self.db = store.KeyValueStore(settings.DB_FILE)
     logging.debug('Finished instantiation of Aerospike information proxy')
     
   def statistics(self, name, delta=True):
