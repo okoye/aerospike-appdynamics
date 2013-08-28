@@ -15,21 +15,21 @@ class TestPersistentStore(unittest.TestCase):
   def setUp(self):
     self.db_path = '/tmp/waldo.sqlite'
     self.c = sqlite.connect(self.db_path)
+    self.cur = self.c.cursor()
     self.kv = KeyValueStore(self.db_path)
     
   def tearDown(self):
-    self.c.execute('DROP TABLE IF EXISTS spikey_metrics')
+    self.cur.execute('DROP TABLE IF EXISTS spikey_metrics')
   
   def _put(self, k, v):
-    self.c.execute('INSERT INTO spikey_metrics VALUES (?,?,?)',
+    self.cur.execute('INSERT INTO spikey_metrics VALUES (?,?,?)',
                     (unicode(k),
                     sqlite.Binary(cPickle.dumps(v, cPickle.HIGHEST_PROTOCOL)),
                     unicode(datetime.now().isoformat())))
     self.c.commit()
 
   def _get(self, k):
-    cursor = self.c.cursor()
-    cursor.execute('SELECT * FROM spikey_metrics WHERE key=?', (unicode(k),)) 
+    self.cur.execute('SELECT * FROM spikey_metrics WHERE key=?', (unicode(k),)) 
     result = cursor.fetchone()
     if result is not None:
       return cPickle.loads(str(result[1]))
