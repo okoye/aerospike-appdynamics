@@ -1,13 +1,10 @@
 import sys
 sys.path.append('../lib')
 from a.wsgc.aerospike.store import KeyValueStore
+import sqlite3 as sqlite
 import cPickle
 import logging
 import unittest
-try:
-  import sqlite3 as sqlite
-except ImportError:
-  import sqlite
 from datetime import datetime
 
 class TestPersistentStore(unittest.TestCase):
@@ -30,7 +27,7 @@ class TestPersistentStore(unittest.TestCase):
 
   def _get(self, k):
     self.cur.execute('SELECT * FROM spikey_metrics WHERE key=?', (unicode(k),)) 
-    result = cursor.fetchone()
+    result = self.cur.fetchone()
     if result is not None:
       return cPickle.loads(str(result[1]))
     return None
