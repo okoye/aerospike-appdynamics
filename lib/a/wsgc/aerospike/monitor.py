@@ -92,7 +92,10 @@ class AerospikeAnalyticsConnector(object):
     '''
     do a simple delta change calculation.
     '''
-    previous, timestamp = self.db.get(db_key)
+    try:
+      previous, timestamp = self.db.get(db_key)
+    except TypeError:
+      previous = 0
     self.db.put(db_key, '%s'%value)
     if previous:
       #hmm, is absolute difference more appropriate?
