@@ -23,6 +23,9 @@ class AerospikeNoData(AerospikeBaseException):
     self.stat = stat
     self.context = 'no data'
 
+  def __str__(self):
+    return self.error
+
 class AerospikeError(AerospikeBaseException):
   
   def __init__(self, host, port, stat, **kwargs):
@@ -32,10 +35,7 @@ class AerospikeError(AerospikeBaseException):
     self.context = 'error code -1'
   
   def __str__(self):
-    err = '%s:%s => %s'%(self.host, self.port, self.context)
-
-  def __repr__(self):
-    return '%s:%s => %s'%(self.host, self.port, self.context)
+    return self.error
 
 class AerospikeNoSuchStat(AerospikeBaseException):
   
@@ -45,6 +45,9 @@ class AerospikeNoSuchStat(AerospikeBaseException):
     self.stat = stat
     self.context = 'no such statistic'
 
+  def __str__(self):
+    return self.error
+
 class LibraryInternalError(Exception):
   
   def __init__(self, msg, traceback,**kwargs):
@@ -53,4 +56,4 @@ class LibraryInternalError(Exception):
     else:
       self.msg = msg
     self.tb = traceback
-
+  
