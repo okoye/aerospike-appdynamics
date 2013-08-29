@@ -96,6 +96,7 @@ class AerospikeAnalyticsConnector(object):
     self.db.put(db_key, '%s'%value)
 
     if previous:
+      logging.debug('previous information stored in db %s'%previous) 
       #hmm, is absolute difference more appropriate?
       return float(value) - float(previous)
     else:
