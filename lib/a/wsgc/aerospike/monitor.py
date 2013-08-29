@@ -94,7 +94,7 @@ class AerospikeAnalyticsConnector(object):
     '''
     previous = self.db.get(db_key)
     self.db.put(db_key, '%s'%value)
-    print previous
+    print previous, value
     if previous:
       #hmm, is absolute difference more appropriate?
       return float(value) - float(previous)
