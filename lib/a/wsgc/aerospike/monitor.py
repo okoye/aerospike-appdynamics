@@ -93,7 +93,7 @@ class AerospikeAnalyticsConnector(object):
     '''
     do a simple delta change calculation.
     '''
-    previous = self.db.get(db_key)
+    previous, timestamp = self.db.get(db_key)
     self.db.put(db_key, '%s'%value)
     print 'previous and current is', previous, value
     if previous:
