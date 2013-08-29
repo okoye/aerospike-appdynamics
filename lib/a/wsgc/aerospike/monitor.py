@@ -74,6 +74,7 @@ class AerospikeAnalyticsConnector(object):
           except ValueError, ve:
             raise ValueError('delta differences can only be computed for numeric values')
           else:
+            print 'stored value is ', v
             stats[name] = self._delta(db_key, v)
         else:
           stats[name] = v
