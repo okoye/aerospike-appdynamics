@@ -4,6 +4,7 @@ from setuptools import setup, find_packages
 #http://semver.org
 
 setup(name='aerospike-appdynamics-connector',
+      version='0.2.0',
       description='aerospike abstraction library for appdynamics scripts',
       author='Chuka O',
       author_email='dokoye@wsgc.com',
