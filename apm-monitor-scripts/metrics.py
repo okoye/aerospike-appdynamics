@@ -6,7 +6,7 @@ PERFORMANCE_PREFIX = 'Performance'
 UTILIZATION_PREFIX = 'Utilization'
 OPERATIONAL_PREFIX = 'Operation'
 
-def printer(prefix='Aerospike|Generic', name, value):
+def printer(name, value, prefix='Aerospike|Generic'):
   print '%s|%s, value=%s'%(prefix, name, value)
 
 col = AerospikeAnalyticsConnector()
