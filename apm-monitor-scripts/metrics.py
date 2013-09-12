@@ -6,11 +6,11 @@ PERFORMANCE_PREFIX = 'Performance'
 UTILIZATION_PREFIX = 'Utilization'
 OPERATIONAL_PREFIX = 'Operation'
 
-def printer(name, value, prefix='Aerospike|Generic'):
+def printer(name, value, prefix='Aerospike|Generic', delta=False):
   print '%s|%s, value=%s'%(prefix, name, value)
 
 col = AerospikeAnalyticsConnector()
-unknown_errors = col.statistics('stat_read_errs_other')
+unknown_errors = col.statistics('stat_read_errs_other', delta=delta)
 uptime = col.statistics('uptime')
 
 printer(OPERATIONAL_PREFIX,'unknown_errors', unknown_errors)
