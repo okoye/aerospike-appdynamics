@@ -42,7 +42,7 @@ class AerospikeAnalyticsConnector(object):
     self.db = store.KeyValueStore(settings.DB_FILE)
     logging.debug('Finished instantiation of Aerospike information proxy')
     
-  def statistics(self, name, delta=True):
+  def statistics(self, name, delta=False):
     '''
     @param
       name: the statistic we are interested in. refer to:

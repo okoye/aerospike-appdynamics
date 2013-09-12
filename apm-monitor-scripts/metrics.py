@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from a.wsgc.aerospike.monitor import AerospikeAnalyticsConnector
-
+import math
 
 PERFORMANCE_PREFIX = 'Performance'
 UTILIZATION_PREFIX = 'Utilization'
@@ -10,7 +10,7 @@ def printer(name, value, prefix='Aerospike|Generic', delta=False):
   print '%s|%s, value=%s'%(prefix, name, value)
 
 col = AerospikeAnalyticsConnector()
-unknown_errors = col.statistics('stat_read_errs_other', delta=delta)
+unknown_errors = col.statistics('stat_read_errs_other')
 uptime = col.statistics('uptime')
 
 printer(OPERATIONAL_PREFIX,'unknown_errors', unknown_errors)
