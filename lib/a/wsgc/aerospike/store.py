@@ -11,7 +11,7 @@ class KeyValueStore(object):
   def __init__(self, db_path):
     conn = self.conn = sqlite.connect(db_path) #fetch db cursor
     cursor = self.cursor = conn.cursor()
-    cursor.execute('CREATE TABLE IF NOT EXISTS spikey_metrics (key text, value blob, timestamp text)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS spikey_metrics (key text PRIMARY KEY, value blob, timestamp text)')
 
   def _encode_key(self, k):
     '''convert a key into python byte string'''
@@ -33,7 +33,7 @@ class KeyValueStore(object):
     sane_key = self._encode_key(key)
 
     #now, what can go wrong?
-    self.cursor.execute('INSERT INTO spikey_metrics VALUES (?,?,?)',
+    self.cursor.execute('INSERT OR REPLACE INTO spikey_metrics VALUES (?,?,?)',
                         (sane_key, pickled_data, unicode(timestamp)))
     self.conn.commit()
 

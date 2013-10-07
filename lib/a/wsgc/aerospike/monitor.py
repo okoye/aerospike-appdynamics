@@ -95,6 +95,7 @@ class AerospikeAnalyticsConnector(object):
     try:
       previous, timestamp = self.db.get(db_key)
     except TypeError:
+      logging.debug('no existing record for %s, setting to zero'%db_key)
       previous = 0
     self.db.put(db_key, '%s'%value)
     if previous:

@@ -71,6 +71,16 @@ class TestPersistentStore(unittest.TestCase):
     result = self._get('languages')
     self.assertEquals(result, lang_dict)
 
+  def test_multiple_puts_for_same_key(self):
+    values = [x for x in xrange(10)]
+    key = 'fob'
+    for i in values:
+      self.kv.put(key, i)
+
+    last_value, _ = self.kv.get(key)
+    self.assertEquals(last_value, values[-1])
+
+
 if __name__ == '__main__':
   logging.basicConfig(level=logging.DEBUG)
   unittest.main()
