@@ -1,32 +1,38 @@
 #!/usr/bin/env python
+'''
+sample script showing how to call aerospike appdynamics connector
+library.
+
+@author: Chuka
+'''
 from a.wsgc.aerospike.monitor import AerospikeAnalyticsConnector
+from sys import stderr 
+from datetime import datetime
 import math
 
-PERFORMANCE_PREFIX = 'Performance'
-UTILIZATION_PREFIX = 'Utilization'
-OPERATIONAL_PREFIX = 'Operation'
+PERFORMANCE_PREFIX = 'Aerospike|NodePerformance'
+RESOURCE_PREFIX = 'Aerospike|ResourceUtilization'
+STATE_PREFIX = 'Aerospike|NodeState'
 
-def printer(name, value, prefix='Aerospike|Generic'):
+def printer(name, value, prefix='Aerospike|Generic', delta=False):
   print '%s|%s, value=%s'%(prefix, name, value)
 
+#convinence logging function
+log = lambda value: stderr.write('\t'.join([datetime.now().isoformat(), 
+  value, 
+  '\n']))
 col = AerospikeAnalyticsConnector()
 
-######  Unknown Errors  ###########
-unknown_errors = col.statistics('stat_read_errs_other')
-unknown_erros = len(unknown_errors) #TODO: delta changes.
+######### Cluster/Node State Monitors ########
+#cluster size as seen by this node
+cluster_size = col.statistics('cluster_size')
+log('cluster_size is %s'%cluster_size.get('cluster_size', 0))
+printer('ClusterSize', 
+  cluster_size.get('cluster_size', 0), 
+  prefix=STATE_PREFIX)
 
+######## Performance Monitors #######
+#TODO
 
-##### Uptime  ###################
-uptime = math.fabs(col.statistics('uptime'))
-
-
-####  Cluster Size #############
-cluster_size = col.statistics('cluster_size').get()
-
-
-
-
-
-#printer(OPERATIONAL_PREFIX,'unknown_errors', unknown_errors)
-#printer(OPERATIONAL_PREFIX, 'cluster_uptime')
-#printer(OPERATIONAL_PREFIX, 'stat_read_reqs')
+####### Resource Utilization Monitors #######
+#TODO
